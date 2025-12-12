@@ -6,7 +6,7 @@ Lockboxes module
 
 def canUnlockAll(boxes):
     """
-    Determines if all boxes can be opened.
+    Determine if all boxes can be opened.
 
     Args:
         boxes (list of lists): list of boxes containing keys
@@ -14,18 +14,21 @@ def canUnlockAll(boxes):
     Returns:
         bool: True if all boxes can be opened, else False
     """
-    if not isinstance(boxes, list):
-        return False
-
     n = len(boxes)
+    if n == 0:
+        return True
+
     opened = [False] * n
     opened[0] = True
 
-    keys = set(boxes[0])
+    stack = [0]
 
-    for key in keys:
-        if 0 <= key < n and not opened[key]:
-            opened[key] = True
-            keys.update(boxes[key])
+    while stack:
+        box = stack.pop()
+
+        for key in boxes[box]:
+            if 0 <= key < n and not opened[key]:
+                opened[key] = True
+                stack.append(key)
 
     return all(opened)
